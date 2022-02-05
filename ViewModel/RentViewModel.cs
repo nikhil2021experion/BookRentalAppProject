@@ -7,15 +7,13 @@ namespace BookRentalAppProject.ViewModel
 {
     public class RentViewModel
     {
-        public int RentId { get; set; }
-       
+
+        public int? BookId { get; set; }
+        public string BookName { get; set; }
+
         public string PublicationName { get; set; }
         public string GenreName { get; set; }
         public string AuthorName { get; set; }
-        
-        
-        public int? BookId { get; set; }
-        public string BookName { get; set; }
         
         public int Price { get; set; }
         public int? RentPrice { get; set; }

@@ -34,6 +34,7 @@ namespace BookRentalAppProject.Repository
                               on b.GenreId equals g.GenreId
                               select new RentViewModel
                               {
+                                  
                                   BookId = b.BookId,
                                   BookName = b.BookName,
                                   PublicationName = p.PublicationName,
