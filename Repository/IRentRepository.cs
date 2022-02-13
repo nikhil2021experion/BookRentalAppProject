@@ -1,4 +1,5 @@
-﻿using BookRentalAppProject.ViewModel;
+﻿using BookRentalAppProject.Models;
+using BookRentalAppProject.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,5 +10,15 @@ namespace BookRentalAppProject.Repository
     public interface IRentRepository
     {
         Task<List<RentViewModel>> GetAllBooksWithRentDetails();
+
+        //add a rent
+        Task<int> AddRent(RentDetails rentDetails);
+
+        //update a Book
+        Task UpdateRent(RentDetails rentDetails);
+
+        Task<RentViewModel> GetRentById(int? id);
+
+
     }
 }

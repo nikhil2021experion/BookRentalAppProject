@@ -10,7 +10,6 @@ namespace BookRentalAppProject.Models
         public int? BookId { get; set; }
         public DateTime? BookTakenDate { get; set; }
         public DateTime? BookReturnedDate { get; set; }
-        public int? RentPrice { get; set; }
 
         public virtual Books Book { get; set; }
         public virtual Members Member { get; set; }

@@ -41,5 +41,26 @@ namespace BookRentalAppProject.Controllers
         }
         #endregion
 
+
+        #region get rent by id
+        [HttpGet]
+        [Route("GetRentById/{id}")]
+        public async Task<RentViewModel> GetRentById(int? id)
+        {
+            try
+            {
+                var member = await _rentRepository.GetRentById(id);
+                if (member != null)
+                {
+                    return await _rentRepository.GetRentById(id);
+                }
+                return null;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+        #endregion
     }
 }

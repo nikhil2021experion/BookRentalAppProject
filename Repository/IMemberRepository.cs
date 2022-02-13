@@ -10,7 +10,7 @@ namespace BookRentalAppProject.Repository
     public interface IMemberRepository
     {
         //get all Members
-        Task<List<Members>> GetAllMembers();
+        Task<List<MembersViewModel>> GetAllMembers();
 
         //add a Member
         Task<int> AddMember(Members members);
@@ -25,6 +25,9 @@ namespace BookRentalAppProject.Repository
         Task<UserViewModel> GetMemberByName(string name);
 
         //getting members with their fine amount
-        //Task<List<MembersViewModel>> GetAllMembersWithFine();
+        Task<List<MembersViewModel>> GetAllMembersWithFine();
+
+
+        Task<MembersViewModel> GetUserByuserNameAndPassword(string user, string pass);
     }
 }

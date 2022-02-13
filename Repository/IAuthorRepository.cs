@@ -1,4 +1,5 @@
 ﻿using BookRentalAppProject.Models;
+using BookRentalAppProject.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,10 @@ namespace BookRentalAppProject.Repository
         //update a Author
         Task UpdateAuthor(Authors authors);
 
+        //delete a author
         Task<int> DeleteAuthor(int? id);
+
+        //get author by id
+        Task<AuthorViewModel> GetAuthorById(int? id);
     }
 }

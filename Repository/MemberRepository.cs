@@ -34,11 +34,28 @@ namespace BookRentalAppProject.Repository
         #endregion
 
         #region get all members
-        public async Task<List<Members>> GetAllMembers()
+        public async Task<List<MembersViewModel>> GetAllMembers()
         {
             if (_ContextFour != null)
             {
-                return await _ContextFour.Members.ToListAsync();
+                //return await _ContextFour.Members.ToListAsync();
+                if (_ContextFour != null)
+                {
+                    return await (from u in _ContextFour.Members
+                                  join r in _ContextFour.Role
+                                  on u.RoleId equals r.RoleId
+                                  select new MembersViewModel
+                                  {
+                                      MemberId = u.MemberId,
+                                      MemberName = u.MemberName,
+                                      Password = u.Password,
+                                      Address = u.Address,
+                                      Mobile = u.Mobile,
+                                      RoleId = (int)u.RoleId,
+                                      RoleName = r.RoleName
+                                  }).ToListAsync();
+                }
+                return null;
             }
             return null;
             //throw new NotImplementedException();
@@ -91,7 +108,7 @@ namespace BookRentalAppProject.Repository
                 var members = await _ContextFour.Members.FindAsync(name);
 
                 return await (from m in _ContextFour.Members
-                              
+                              where  m.MemberName == name 
                               select new UserViewModel
                               {
                                   MemberId = m.MemberId,
@@ -105,12 +122,39 @@ namespace BookRentalAppProject.Repository
             //throw new NotImplementedException();
         }
         #endregion
-        /*
+
+
+        #region login
+
+        public async Task<MembersViewModel> GetUserByuserNameAndPassword(string user, string pass)
+        {
+            if (_ContextFour != null)
+            {
+                return await (from u in _ContextFour.Members
+                              from r in _ContextFour.Role
+                              where u.RoleId == r.RoleId && u.MemberName == user && u.Password == pass
+                              select new MembersViewModel
+                              {
+                                  MemberId = u.MemberId,
+                                  MemberName = u.MemberName,
+                                  Password = u.Password,
+                                  Address = u.Address,
+                                  Mobile = u.Mobile,
+                                  RoleId = r.RoleId,
+                                  RoleName = r.RoleName
+                              }).FirstOrDefaultAsync();
+            }
+            return null;
+            //throw new NotImplementedException();
+        }
+        #endregion
+
+
         #region get members with fine
 
         public async Task<List<MembersViewModel>> GetAllMembersWithFine()
         {
-
+                                                                                                
             if (_ContextFour != null)
             {
                 
@@ -119,23 +163,27 @@ namespace BookRentalAppProject.Repository
                              on r.BookId equals b.BookId
                              join m in _ContextFour.Members
                              on r.MemberId equals m.MemberId
-                             let difference = DbFunction.Diffdays(r.BookTakenDate, r.BookReturnedDate)
-                             where difference >  10
-                             select new RentViewModel
+                             
+                             //where SqlServerDbFunctionsExtensions.DateDiffDay(r.BookTakenDate,r.BookReturnedDate)// /(r.BookTakenDate , r.BookReturnedDate)
+                             where (r.BookReturnedDate.Value.DayOfYear - r.BookTakenDate.Value.DayOfYear > 10)
+                             select new MembersViewModel
                              {
+                                 
                                  BookId = b.BookId,
                                  BookName = b.BookName,
-                                 PublicationName = p.PublicationName,
-                                 AuthorName = a.AuthorName,
-                                 GenreName = g.GenreName,
+                                 MemberId = m.MemberId,
+                                 MemberName = m.MemberName,
+                                 Mobile = m.Mobile,
+                                 Address = m.Address,
                                  Price = b.Price,
-                                 RentPrice = r.RentPrice
+                                 RentPrice = (double)b.Price * 5 / 100,
+                                 FineAmount = (r.BookReturnedDate.Value.DayOfYear - r.BookTakenDate.Value.DayOfYear) + (double)( b.Price * 5 / 100),                                 
                              }).ToListAsync();
             }
             return null;
             //throw new NotImplementedException();
         }
         #endregion
-        */
+        
     }
 }

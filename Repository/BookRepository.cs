@@ -43,8 +43,10 @@ namespace BookRentalAppProject.Repository
 
                               join p in _ContextOne.PublicationDetails
                               on b.PublicationId equals p.PublicationId
+
                               join a in _ContextOne.Authors
                               on b.AuthorId equals a.AuthorId
+
                               join g in _ContextOne.GenreDetails
                               on b.GenreId equals g.GenreId
                               select new BookViewModel
@@ -102,7 +104,7 @@ namespace BookRentalAppProject.Repository
 
 
 
-        #region get book details using ID
+        #region get book details using BookID
         public async Task<BookViewModel> GetBooksById(int? id)
         {
 
@@ -118,6 +120,7 @@ namespace BookRentalAppProject.Repository
                               on b.AuthorId equals a.AuthorId
                               join g in _ContextOne.GenreDetails
                               on b.GenreId equals g.GenreId
+                              where b.BookId == id 
                               select new BookViewModel
                               {
                                   BookId = b.BookId,

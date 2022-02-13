@@ -21,7 +21,7 @@ namespace BookRentalAppProject.Models
         public virtual DbSet<Members> Members { get; set; }
         public virtual DbSet<PublicationDetails> PublicationDetails { get; set; }
         public virtual DbSet<RentDetails> RentDetails { get; set; }
-        public object MembersViewModel { get; internal set; }
+        public virtual DbSet<Role> Role { get; set; }
 
         /*
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -51,7 +51,7 @@ namespace BookRentalAppProject.Models
             modelBuilder.Entity<Books>(entity =>
             {
                 entity.HasKey(e => e.BookId)
-                    .HasName("PK__Books__3DE0C2275AA956C7");
+                    .HasName("PK__Books__3DE0C2278829CBC6");
 
                 entity.Property(e => e.BookId).HasColumnName("BookID");
 
@@ -69,17 +69,17 @@ namespace BookRentalAppProject.Models
                 entity.HasOne(d => d.Author)
                     .WithMany(p => p.Books)
                     .HasForeignKey(d => d.AuthorId)
-                    .HasConstraintName("FK__Books__AuthorID__5CD6CB2B");
+                    .HasConstraintName("FK__Books__AuthorID__76969D2E");
 
                 entity.HasOne(d => d.Genre)
                     .WithMany(p => p.Books)
                     .HasForeignKey(d => d.GenreId)
-                    .HasConstraintName("FK__Books__GenreID__5BE2A6F2");
+                    .HasConstraintName("FK__Books__GenreID__75A278F5");
 
                 entity.HasOne(d => d.Publication)
                     .WithMany(p => p.Books)
                     .HasForeignKey(d => d.PublicationId)
-                    .HasConstraintName("FK__Books__Publicati__5AEE82B9");
+                    .HasConstraintName("FK__Books__Publicati__74AE54BC");
             });
 
             modelBuilder.Entity<GenreDetails>(entity =>
@@ -98,7 +98,7 @@ namespace BookRentalAppProject.Models
             modelBuilder.Entity<Members>(entity =>
             {
                 entity.HasKey(e => e.MemberId)
-                    .HasName("PK__Members__0CF04B3818938C68");
+                    .HasName("PK__Members__0CF04B387447613A");
 
                 entity.Property(e => e.MemberId).HasColumnName("MemberID");
 
@@ -115,6 +115,18 @@ namespace BookRentalAppProject.Models
                     .IsRequired()
                     .HasMaxLength(10)
                     .IsUnicode(false);
+
+                entity.Property(e => e.Password)
+                    .IsRequired()
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.RoleId).HasColumnName("RoleID");
+
+                entity.HasOne(d => d.Role)
+                    .WithMany(p => p.Members)
+                    .HasForeignKey(d => d.RoleId)
+                    .HasConstraintName("FK__Members__RoleID__71D1E811");
             });
 
             modelBuilder.Entity<PublicationDetails>(entity =>
@@ -133,7 +145,7 @@ namespace BookRentalAppProject.Models
             modelBuilder.Entity<RentDetails>(entity =>
             {
                 entity.HasKey(e => e.RentId)
-                    .HasName("PK__RentDeta__783D4015467A6DC1");
+                    .HasName("PK__RentDeta__783D4015389C9FBF");
 
                 entity.Property(e => e.RentId).HasColumnName("RentID");
 
@@ -148,12 +160,22 @@ namespace BookRentalAppProject.Models
                 entity.HasOne(d => d.Book)
                     .WithMany(p => p.RentDetails)
                     .HasForeignKey(d => d.BookId)
-                    .HasConstraintName("FK__RentDetai__BookI__60A75C0F");
+                    .HasConstraintName("FK__RentDetai__BookI__7A672E12");
 
                 entity.HasOne(d => d.Member)
                     .WithMany(p => p.RentDetails)
                     .HasForeignKey(d => d.MemberId)
-                    .HasConstraintName("FK__RentDetai__Membe__5FB337D6");
+                    .HasConstraintName("FK__RentDetai__Membe__797309D9");
+            });
+
+            modelBuilder.Entity<Role>(entity =>
+            {
+                entity.Property(e => e.RoleId).HasColumnName("RoleID");
+
+                entity.Property(e => e.RoleName)
+                    .IsRequired()
+                    .HasMaxLength(25)
+                    .IsUnicode(false);
             });
 
             OnModelCreatingPartial(modelBuilder);

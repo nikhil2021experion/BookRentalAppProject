@@ -1,4 +1,5 @@
 ﻿using BookRentalAppProject.Models;
+using BookRentalAppProject.ViewModel;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -75,6 +76,28 @@ namespace BookRentalAppProject.Repository
                 return result;
             }
             return result;
+            //throw new NotImplementedException();
+        }
+        #endregion
+
+        #region get author details using authorID
+        public async Task<AuthorViewModel> GetAuthorById(int? id)
+        {
+
+            if (_ContextTwo != null)
+            {
+                //var members = await _ContextFour.Members.FindAsync(id);
+
+                return await (from a in _ContextTwo.Authors
+                              where a.AuthorId == id
+                              select new AuthorViewModel
+                              {
+                                  AuthorId = a.AuthorId,
+                                  AuthorName = a.AuthorName                                 
+                              }).FirstOrDefaultAsync();
+
+            }
+            return null;
             //throw new NotImplementedException();
         }
         #endregion

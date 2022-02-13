@@ -12,37 +12,35 @@ namespace BookRentalAppProject.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthorsController : ControllerBase
+    public class PublicationsController : ControllerBase
     {
+        private readonly IPublicationRepository _publicationRepository;
 
-
-
-        private readonly IAuthorRepository _authorRepository;
-
-        public AuthorsController(IAuthorRepository authorRepository)
+        public PublicationsController(IPublicationRepository publicationRepository)
         {
-            _authorRepository = authorRepository;
+            _publicationRepository = publicationRepository;
         }
 
-        #region get all authors
+
+        #region get all publications
         [HttpGet]
-        public async Task<List<Authors>> GetAllAuthors()
+        public async Task<List<PublicationDetails>> GetAllPublications()
         {
-            return await _authorRepository.GetAllAuthors();
+            return await _publicationRepository.GetAllPublications();
         }
         #endregion
 
-        #region get author using id
+        #region get publisher using id
         [HttpGet]
-        [Route("GetAuthorById/{id}")]
-        public async Task<AuthorViewModel> GetAuthorById(int? id)
+        [Route("GetPublisherById/{id}")]
+        public async Task<PublicationViewModel> GetPublisherById(int? id)
         {
             try
             {
-                var member = await _authorRepository.GetAuthorById(id);
-                if (member != null)
+                var publisher = await _publicationRepository.GetPublisherById(id);
+                if (publisher != null)
                 {
-                    return await _authorRepository.GetAuthorById(id);
+                    return await _publicationRepository.GetPublisherById(id);
                 }
                 return null;
             }
@@ -53,18 +51,18 @@ namespace BookRentalAppProject.Controllers
         }
         #endregion
 
-        #region add an author
+        #region add a publication
         [HttpPost]
-        public async Task<IActionResult> AddAuthor([FromBody] Authors authors)
+        public async Task<IActionResult> AddPublication([FromBody] PublicationDetails publicationDetails)
         {
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var authorID = await _authorRepository.AddAuthors(authors);
-                    if (authorID > 0)
+                    var publicationID = await _publicationRepository.AddPublication(publicationDetails);
+                    if (publicationID > 0)
                     {
-                        return Ok(authorID);
+                        return Ok(publicationID);
                     }
                     return NotFound();
                 }
@@ -77,16 +75,16 @@ namespace BookRentalAppProject.Controllers
         }
         #endregion
 
-        #region update an author
+        #region update a publication
         [HttpPut]
-        public async Task<IActionResult> UpdateAuthor([FromBody] Authors authors)
+        public async Task<IActionResult> UpdatePublication([FromBody] PublicationDetails publicationDetails)
         {
             //since it is frombody we need to check the validation of body
             if (ModelState.IsValid)
             {
                 try
                 {
-                    await _authorRepository.UpdateAuthor(authors);
+                    await _publicationRepository.UpdatePublication(publicationDetails);
                     return Ok();
                 }
                 catch (Exception)
@@ -100,10 +98,10 @@ namespace BookRentalAppProject.Controllers
         #endregion
 
 
-        #region delete a author
+        #region delete a publication
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAuthor(int? id)
+        public async Task<IActionResult> DeletePublication(int? id)
         {
             int result = 0;
             if (id == null)
@@ -113,7 +111,7 @@ namespace BookRentalAppProject.Controllers
 
             try
             {
-                result = await _authorRepository.DeleteAuthor(id);
+                result = await _publicationRepository.DeletePublication(id);
                 if (result == 0)
                 {
                     return NotFound();
@@ -126,6 +124,5 @@ namespace BookRentalAppProject.Controllers
             }
         }
         #endregion
-
     }
 }

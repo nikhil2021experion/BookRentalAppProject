@@ -13,5 +13,8 @@ namespace BookRentalAppProject.ViewModel
         public int? GenreId { get; set; }
         public int? AuthorId { get; set; }
         public int Price { get; set; }
+
+        public string MemberName { get; set; }
+
     }
 }
